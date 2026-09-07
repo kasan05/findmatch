@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: findmatch
+spec:
+  selector:
+    matchLabels:
+      app: findmatch
+  template:
+    metadata:
+      labels:
+        app: findmatch
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+        - name: findmatch
+          image:  findmatch:1.0
+          ports:
+            - containerPort: 8080

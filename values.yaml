@@ -1,0 +1,11 @@
+rules:
+  custom:
+    - seriesQuery: 'kubectl get --raw {application="findmatch"}'
+      resources:
+        overrides:
+          kubernetes_namespace: {resource: "jenkins"}
+          kubernetes_pod_name: {resource: "pod"}
+      name:
+        matches: "^(.*)"
+        as: "${1}_per_second" # Renames the metric for clarity in K8s HPA
+      metricsQuery: 'sum(rate(<<.Series>>{<<.LabelMatchers>>}[1m])) by (<<.GroupBy>>)'

@@ -1,0 +1,3 @@
+prometheus:
+  url: "http://prometheus-server.jenkins.svc.cluster.local"
+  port: 80

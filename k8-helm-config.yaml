@@ -1,0 +1,11 @@
+rules:
+  custom:
+    - seriesQuery: 'http_server_requests_seconds_count{job="kubernetes-pods", app="<your-app-name>"}' # Match your specific metric and labels
+      resources:
+        overrides:
+          kubernetes_namespace: {resource: "namespace"}
+          kubernetes_pod_name: {resource: "pod"}
+      name:
+        matches: "^(.*)_seconds_count$" # Matches the original metric name
+        as: "${1}_count" # Renames it to http_server_requests_count in the custom metrics API
+      metricsQuery: 'sum(rate(<<.Series>>{<<.LabelMatchers>>}[1m])) by (<<.GroupBy>>)' # Calculates requests per minute
